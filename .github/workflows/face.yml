@@ -24,4 +24,4 @@ jobs:
 
       - name: Run the application
         run: |
-          nohup uvicorn main:app --host 0.0.0.0 --port $PORT &
+          nohup uvicorn Facial_recognition:app --host 0.0.0.0 --port $PORT &
