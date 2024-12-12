@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install fastapi uvicorn opencv-python PyQt5 requests
+          pip install fastapi uvicorn opencv-python PyQt5 requests python-multipart
 
       - name: Run the application
         run: |
