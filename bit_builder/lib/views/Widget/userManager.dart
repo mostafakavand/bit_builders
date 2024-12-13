@@ -7,33 +7,30 @@ class UserManager extends StatefulWidget {
 }
 
 class _UserManagerState extends State<UserManager> {
-  List<Map<String, String>> users = [
-    {
-      'name': 'John Doe',
-      'info': 'Added via Camera',
-      'image': 'assets/images/13.png',
-    },
-    {
-      'name': 'Jane Smith',
-      'info': 'Added via Voice',
-      'image': 'assets/images/13.png',
-    },
-    {
-      'name': 'Ali Reza',
-      'info': 'Added via Camera',
-      'image': 'assets/images/13.png',
-    },
-    {
-      'name': 'Zahra Khan',
-      'info': 'Added via Voice',
-      'image': 'assets/images/13.png',
-    },
-    {
-      'name': 'Sara',
-      'info': 'Added via Camera',
-      'image': 'assets/images/13.png',
-    },
-  ];
+  final dbHelper = DatabaseHelper();
+
+  // Add user
+  Future<void> addUser(Map<String, String> user) async {
+    final db = await dbHelper.database;
+    await db.insert('users', user);
+    loadUsers(); // Refresh list
+  }
+
+  // Load users
+  Future<void> loadUsers() async {
+    final db = await dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('users');
+    setState(() {
+      users = List<Map<String, String>>.from(maps.map(
+          (x) => {'name': x['name'], 'info': x['info'], 'image': x['image']}));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUsers();
+  }
 
   /// Method to add a user from JSON data
   void addUserFromJson(String jsonString) {
@@ -42,12 +39,10 @@ class _UserManagerState extends State<UserManager> {
       if (jsonData.containsKey('name') &&
           jsonData.containsKey('info') &&
           jsonData.containsKey('image')) {
-        setState(() {
-          users.add({
-            'name': jsonData['name'] as String,
-            'info': jsonData['info'] as String,
-            'image': jsonData['image'] as String,
-          });
+        addUser({
+          'name': jsonData['name'] as String,
+          'info': jsonData['info'] as String,
+          'image': jsonData['image'] as String,
         });
       } else {
         throw FormatException('Invalid JSON format');
