@@ -1,5 +1,6 @@
 The correct folder structure for this project should be:
 
+```
 project_root/
 │
 ├── lib/
@@ -26,3 +27,4 @@ project_root/
 ├── figma/
 │
 └── docs/
+```
